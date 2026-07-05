@@ -86,5 +86,39 @@
     "sinopsis": "",
     "preview": ""
   }
+},
+  {
+  "id": "hadir-sepenuh-jiwa",
+  "judul": "Hadir Sepenuh Jiwa",
+  "subtitle": "Seni Memberdayakan Manusia dengan Hati dan Ilmu",
+  "kategori": [
+    "P4GN",
+    "Humanistik",
+    "Refleksi",
+    "Keluarga",
+    "Motivasi",
+    "Pendidikan",
+    "Penelitian"
+  ],
+  "tahun": "2025",
+  "status": "Terbit",
+  "unggulan": false,
+  "terbaru": true,
+  "isbn": "978-634-01-1227-6",
+  "hakcipta": "",
+  "cover": "covers/hadir-sepenuh-jiwa.webp",
+  "icon": "📘",
+  "deskripsi": "buku reflektif yang mengajak pembaca menghadirkan hati, empati, dan kesadaran dalam setiap peran kehidupan sebagai pendidik, pemimpin, penyuluh, maupun manusia biasa. Melalui bahasa yang hangat dan membumi, buku ini menawarkan seni memberdayakan manusia bukan dengan menggurui, melainkan dengan kehadiran yang utuh dan manusiawi",
+  "sinopsis": "",
+  "marketplace": {
+    "shopee": "https://shopee.co.id/product/15385962/43769026113/",
+    "tokopedia": "https://tk.tokopedia.com/ZSDrJEJjL/",
+    "tiktok": "https://shorturl.at/meCs0",
+    "gramedia": "",
+    "googleplay": "",
+    "whatsapp": "",
+    "sinopsis": "",
+    "preview": ""
+  }
 }
 ]

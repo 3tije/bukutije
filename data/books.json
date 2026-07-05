@@ -24,5 +24,36 @@
       "sinopsis": "",
       "preview": ""
     }
+  },
+  {
+  "id": "penyuluh-hebat-manusia-merdeka",
+  "judul": "Penyuluh Hebat, Manusia Merdeka",
+  "subtitle": "Metode Humanistik Atasi Narkoba",
+  "kategori": [
+    "P4GN",
+    "Humanistik",
+    "Pendidikan",
+    "Penelitian"
+  ],
+  "tahun": "2025",
+  "status": "Terbit",
+  "unggulan": false,
+  "terbaru": true,
+  "isbn": "978-634-01-1229-0",
+  "hakcipta": "001068379",
+  "cover": "covers/penyuluh-hebat-manusia-merdeka.webp",
+  "icon": "📘",
+  "deskripsi": "Buku ini menghadirkan pendekatan humanistik dalam pencegahan narkoba menyentuh hati, membangun empati, dan memberdayakan komunitas dari perbatasan hingga pesisir. Dengan memadukan kisah nyata lapangan, teknik praktis, dan infografis aplikatif untuk siapa pun yang ingin menjadi penyuluh for humanity dan bagian dari gerakan Indonesia Bersinar.",
+  "sinopsis": "",
+  "marketplace": {
+    "shopee": "https://shopee.co.id/product/15385962/43419031138/",
+    "tokopedia": "https://tk.tokopedia.com/ZSDrJwHau/",
+    "tiktok": "https://shorturl.at/922eZ",
+    "gramedia": "",
+    "googleplay": "",
+    "whatsapp": "",
+    "sinopsis": "",
+    "preview": ""
   }
+}
 ]

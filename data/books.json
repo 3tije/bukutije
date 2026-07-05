@@ -120,5 +120,37 @@
     "sinopsis": "",
     "preview": ""
   }
+},
+  {
+  "id": "kekuatan-dalam-diam",
+  "judul": "Kekuatan dalam Diam",
+  "subtitle": "Merawat Luka, Menjaga Martabat",
+  "kategori": [
+    "Humanistik",
+    "Dakwah",
+    "Kepemimpinan",
+    "Keluarga",
+    "Motivasi"
+  ],
+  "tahun": "2025",
+  "status": "Terbit",
+  "unggulan": false,
+  "terbaru": true,
+  "isbn": "978-634-216-580-5, (Versi Cetak) : 978-634-216-579-9 (Versi Pdf)",
+  "hakcipta": "",
+  "cover": "covers/kekuatan-dalam-diam.webp",
+  "icon": "📘",
+  "deskripsi": "Keteguhan dalam Diam adalah refleksi tentang kekuatan batin saat memilih tenang menghadapi kesalahan, ketidakadilan, dan luka dari orang lain tanpa kehilangan harga diri. Buku ini mengajak pembaca memahami bahwa diam bukan kelemahan, melainkan sikap sadar untuk menjaga martabat dan mempercayakan kebenaran pada waktu dan Tuhan.",
+  "sinopsis": "",
+  "marketplace": {
+    "shopee": "https://id.shp.ee/KB86CpA",
+    "tokopedia": "https://www.tokopedia.com/penerbitadab/kekuatan-dalam-diam-merawat-luka-menjaga-martabat-tri-tjahyono-penerbit-adab-1733517899103045323",
+    "tiktok": "",
+    "gramedia": "https://ebooks.gramedia.com/id/buku/kekuatan-dalam-diam-merawat-luka-menjaga-martabat",
+    "googleplay": "",
+    "whatsapp": "",
+    "sinopsis": "",
+    "preview": ""
+  }
 }
 ]

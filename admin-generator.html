@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Generator Buku Tije</title>
+<style>
+:root{--navy:#061b3a;--blue:#0b63ff;--cyan:#12bff3;--soft:#f4f8ff;--line:#e4ecf8;--muted:#667085}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#f7fbff,#eef5ff);color:#10213f}.wrap{max-width:1000px;margin:auto;padding:20px}.panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:16px;box-shadow:0 10px 26px rgba(6,27,58,.08)}h1,h2{color:var(--navy)}label{display:block;font-weight:900;margin:12px 0 6px}input,textarea{width:100%;border:1px solid #d6e3f3;border-radius:14px;padding:11px;font:inherit}textarea{min-height:90px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:0;border-radius:999px;padding:12px 16px;font-weight:900;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff}.secondary{background:#fff;border:1px solid #d6e3f3;color:var(--navy)}.hidden{display:none!important}pre{white-space:pre-wrap;background:#061b3a;color:#eaf3ff;padding:16px;border-radius:18px;overflow:auto}.hint{color:var(--muted);line-height:1.6}@media(max-width:700px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="login" class="panel">
+<h1>Admin Generator Buku Tije</h1><p class="hint">Halaman ini hanya membuat blok JSON. Data tetap disimpan aman di GitHub file <b>data/books.json</b>.</p>
+<label>Password</label><input id="pass" type="password" placeholder="Masukkan password">
+<div style="margin-top:14px"><button class="btn primary" onclick="login()">Masuk</button></div>
+</div>
+<div id="app" class="hidden">
+<div class="panel"><h1>Input Data Buku</h1><p class="hint">Isi form, klik Generate JSON, lalu copy hasilnya ke file <b>data/books.json</b>.</p>
+<div class="row"><div><label>ID slug</label><input id="id" placeholder="penyuluh-hebat"></div><div><label>Judul</label><input id="judul"></div></div>
+<label>Subtitle</label><input id="subtitle">
+<div class="row"><div><label>Kategori, pisahkan koma</label><input id="kategori" placeholder="P4GN, Humanistik"></div><div><label>Status</label><input id="status" value="Terbit"></div></div>
+<div class="row"><div><label>Tahun</label><input id="tahun" value="2026"></div><div><label>ISBN</label><input id="isbn"></div></div>
+<div class="row"><div><label>Hak Cipta</label><input id="hakcipta"></div><div><label>Cover</label><input id="cover" placeholder="covers/nama-buku.webp"></div></div>
+<div class="row"><div><label>Icon</label><input id="icon" value="📘"></div><div><label>Warna</label><input id="warna" value="#0b63ff"></div></div>
+<label>Deskripsi singkat</label><textarea id="deskripsi"></textarea>
+<label>Sinopsis lengkap</label><textarea id="sinopsis"></textarea>
+<h2>Marketplace / Link</h2>
+<div class="row"><div><label>Shopee</label><input id="shopee"></div><div><label>Tokopedia</label><input id="tokopedia"></div></div>
+<div class="row"><div><label>TikTok Shop</label><input id="tiktok"></div><div><label>Gramedia</label><input id="gramedia"></div></div>
+<div class="row"><div><label>WhatsApp</label><input id="whatsapp"></div><div><label>Sinopsis URL</label><input id="sinopsisLink"></div></div>
+<label>Preview PDF</label><input id="preview">
+<div style="margin-top:16px"><button class="btn primary" onclick="generate()">Generate JSON</button> <button class="btn secondary" onclick="clearForm()">Bersihkan</button></div>
+</div>
+<div class="panel"><h2>Hasil JSON</h2><p class="hint">Copy satu blok ini, lalu paste sebagai item baru di array <b>data/books.json</b>. Jangan lupa koma antar item.</p><pre id="output">Belum ada data.</pre><button class="btn primary" onclick="copyJson()">Copy JSON</button></div>
+</div>
+</div>
+<script>
+const PASSWORD='bukutije123';
+function $(id){return document.getElementById(id)}
+function login(){if($('pass').value===PASSWORD){$('login').classList.add('hidden');$('app').classList.remove('hidden')}else alert('Password salah')}
+function val(id){return $(id).value.trim()}
+function generate(){let obj={id:val('id'),judul:val('judul'),subtitle:val('subtitle'),kategori:val('kategori').split(',').map(x=>x.trim()).filter(Boolean),tahun:val('tahun'),status:val('status'),isbn:val('isbn'),hakcipta:val('hakcipta'),cover:val('cover'),icon:val('icon')||'📘',warna:val('warna')||'#0b63ff',deskripsi:val('deskripsi'),sinopsis:val('sinopsis'),marketplace:{shopee:val('shopee'),tokopedia:val('tokopedia'),tiktok:val('tiktok'),gramedia:val('gramedia'),whatsapp:val('whatsapp'),sinopsis:val('sinopsisLink'),preview:val('preview')}};$('output').textContent=JSON.stringify(obj,null,2)}
+function copyJson(){navigator.clipboard.writeText($('output').textContent);alert('JSON disalin')}
+function clearForm(){document.querySelectorAll('input,textarea').forEach(x=>{if(x.id!=='tahun'&&x.id!=='status'&&x.id!=='warna'&&x.id!=='icon')x.value=''});$('output').textContent='Belum ada data.'}
+</script>
+</body>
+</html>

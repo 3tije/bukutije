@@ -20,7 +20,7 @@ section{padding:42px 0}h2{color:var(--navy);font-size:32px;margin:0 0 8px}.muted
 <body>
 <header><div class="wrap nav"><a class="brand" href="#top"><img src="assets/logo-bukutije.webp" class="logoimg" alt="Logo Buku Tije"><span class="brandtext"><strong>Buku Tije</strong><br><small>Inspirasi • Edukasi • Transformasi</small></span></a><nav><a class="navlink" href="#katalog">Katalog</a><a class="navlink" href="#penulis">Penulis</a><a class="navlink" href="admin-generator.html">Admin</a></nav></div></header>
 <main id="top">
-<section class="hero"><div class="wrap heroGrid"><div><span class="badge">Katalog Karya Buku Tri Tjahyono</span><h1>Buku Tije</h1><div class="motto"><span>✦</span> Inspirasi <span>•</span> Edukasi <span>•</span> Transformasi <span>✦</span></div><p>Kumpulan karya tentang kemanusiaan, pencegahan narkoba, ketahanan diri, kepemimpinan, keluarga, remaja, spiritualitas, dan refleksi hidup.</p><a class="btn primary" href="#katalog">Lihat Katalog</a><a class="btn" href="https://s.id/bukutije" target="_blank" rel="noopener">Buka Link Resmi</a></div><div class="heroCard"><div class="bookVisual"><img src="assets/logo-bukutije.webp" alt="Logo Buku Tije"></div><div class="stats"><div><b id="statTotal">0</b><small>Judul Buku</small></div><div><b id="statCat">0</b><small>Kategori</small></div><div><b>2026</b><small>Katalog</small></div></div></div></div></section>
+<section class="hero"><div class="wrap heroGrid"><div><span class="badge">Katalog Karya Buku Tri Tjahyono</span><h1>Buku Tije</h1><div class="motto"><span>✦</span> Inspirasi <span>•</span> Edukasi <span>•</span> Transformasi <span>✦</span></div><p>Kumpulan karya tentang kemanusiaan, pencegahan narkoba, ketahanan diri, kepemimpinan, keluarga, remaja, spiritualitas, dan refleksi hidup.</p><a class="btn primary" href="#katalog">Jelajahi Katalog Buku</a></div><div class="heroCard"><div class="bookVisual"><img src="assets/logo-bukutije.webp" alt="Logo Buku Tije"></div><div class="stats"><div><b id="statTotal">0</b><small>Judul Buku</small></div><div><b id="statCat">0</b><small>Kategori</small></div><div><b>2026</b><small>Katalog</small></div></div></div></div></section>
 <section id="katalog"><div class="wrap"><div class="sectionTop"><div><h2>Katalog Buku</h2></div><div class="searchBox"><input id="searchInput" type="search" placeholder="Cari judul, kategori, ISBN..." oninput="renderBooks()"></div></div><div class="filters" id="filters"><button class="filter active" data-filter="all">Semua</button></div><div id="loading" class="muted">Memuat katalog...</div><div class="grid" id="grid"></div></div></section>
 <section class="about" id="penulis"><div class="wrap"><div class="aboutBox"><img src="assets/logo-bukutije.webp" class="aboutLogo" alt="Logo Buku Tije"><div><h2>Tentang Penulis</h2><p class="muted">Tri Tjahyono menulis dengan semangat kemanusiaan, edukasi, dan perubahan sosial. Buku-buku ini menjadi ruang berbagi pengalaman, gagasan, dan nilai agar pengetahuan bergerak menjadi manfaat.</p></div></div><div class="quote"><p>“Menulis adalah cara merawat jiwa. Agar pengalaman tidak berhenti di dalam diri, tetapi menjadi cahaya kecil bagi orang lain.”</p><small>— Tri Tjahyono</small></div></div></section>
 </main>
@@ -193,6 +193,11 @@ function renderBooks(){
           btn('WA', m.whatsapp, '') +
           btn('Sinopsis', m.sinopsis, '') +
           btn('Preview', m.preview, '') +
+      btn(
+   "🎯 ABS Remaja Hub",
+   m.app,
+   "appbtn"
+)
         '</div>' +
       '</article>'
     );

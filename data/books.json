@@ -187,5 +187,37 @@
     "sinopsis": "",
     "preview": ""
   }
+},
+  {
+  "id": "nikmat-di-balik-sakit",
+  "judul": "Nikmat di Balik Sakit",
+  "subtitle": "Menemukan Syukur dalam Ujian",
+  "kategori": [
+    "Humanistik",
+    "Dakwah",
+    "Refleksi",
+    "Keluarga",
+    "Motivasi"
+  ],
+  "tahun": "2025",
+  "status": "Terbit",
+  "unggulan": false,
+  "terbaru": true,
+  "isbn": "",
+  "hakcipta": "001220822",
+  "cover": "covers/nikmat-di-balik-sakit.webp",
+  "icon": "📘",
+  "deskripsi": "Nikmat di Balik Sakit adalah buku reflektif yang mengajak pembaca memaknai sakit bukan sebagai beban, melainkan ruang kesadaran untuk belajar sabar, menerima, dan bersyukur. Dengan bahasa yang hangat dan manusiawi, buku ini menemani siapa pun yang sedang diuji untuk menemukan ketenangan, harapan, dan makna hidup di balik rasa sakit.",
+  "sinopsis": "",
+  "marketplace": {
+    "shopee": "",
+    "tokopedia": "",
+    "tiktok": "",
+    "gramedia": "",
+    "googleplay": "https://lynk.id/3tije/4m2g8qk24vqx",
+    "whatsapp": "",
+    "sinopsis": "",
+    "preview": ""
+  }
 }
 ]

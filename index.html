@@ -47,6 +47,7 @@ function escapeHtml(text){
     .replaceAll("'","&#039;");
 }
 
+// Tombol fleksibel: marketplace.appLabel atau appLabel menentukan nama tombol aplikasi/microsite
 function btn(label, url, cls){
   return url
     ? '<a class="mini '+(cls || '')+'" target="_blank" rel="noopener" href="'+escapeHtml(url)+'">'+label+'</a>'
@@ -141,6 +142,8 @@ function matchSearch(b){
     b.deskripsi,
     b.sinopsis,
     b.quote,
+    b.appLabel,
+    (b.marketplace && b.marketplace.appLabel),
     b.isbn,
     b.hakcipta,
     b.halaman,
@@ -216,7 +219,7 @@ function renderBooks(){
           btn('WA', m.whatsapp, '') +
           btn('Sinopsis', m.sinopsis, '') +
           btn('Preview', m.preview, '') +
-          btn(m.appLabel || 'Aplikasi / Microsite', m.app, 'appbtn') +
+          btn(m.appLabel || b.appLabel || 'Aplikasi / Microsite', m.app, 'appbtn') +
           btn('Video', m.video, '') +
         '</div>' +
       '</article>'

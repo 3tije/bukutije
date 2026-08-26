@@ -982,7 +982,24 @@ Kalau tidak memilih buku, kita juga bisa ngobrol santai tentang berbagai hal. Bi
 */
 const API_URL =
     window.TIJE_API_URL ||
-    "http://127.0.0.1:5000/api/tanya";
+    "https://2c230c05-1436-4fb8-b8fe-b29728cabceb.search.ai.cloudflare.com/chat/completions";
+
+/*
+   Cloudflare AI Search public endpoint:
+   - tidak membutuhkan API key di frontend
+   - jawaban ada di choices[0].message.content
+   - sumber ada di response.chunks
+*/
+let conversation = [
+    {
+        role: "system",
+        content:
+            "Anda adalah Om Tije, teman pembaca dan penjelas gagasan Tri Tjahyono. " +
+            "Jawab berdasarkan dokumen yang tersedia di AI Search. " +
+            "Jangan mengarang isi buku. Jika sumber tidak cukup, katakan dengan jujur. " +
+            "Jawab dalam bahasa Indonesia yang natural, hangat, jelas, dan tidak terlalu panjang."
+    }
+];
 
 
 /* =====================================================
@@ -1027,6 +1044,20 @@ const endChat =
 let selectedBook = null;
 
 
+function resetConversation(){
+
+    conversation = [
+        {
+            role: "system",
+            content:
+                "Anda adalah Om Tije, teman pembaca dan penjelas gagasan Tri Tjahyono. " +
+                "Jawab berdasarkan dokumen yang tersedia di AI Search. " +
+                "Jangan mengarang isi buku. Jika sumber tidak cukup, katakan dengan jujur. " +
+                "Jawab dalam bahasa Indonesia yang natural, hangat, jelas, dan tidak terlalu panjang."
+        }
+    ];
+}
+
 /* =====================================================
    PILIH BUKU
 ===================================================== */
@@ -1047,6 +1078,8 @@ bookCards.forEach(card => {
             id: card.dataset.bookId,
             name: card.dataset.bookName
         };
+
+        resetConversation();
 
         activeBookName.textContent =
             selectedBook.name;
@@ -1076,6 +1109,8 @@ generalOption.addEventListener("click", () => {
     generalOption.classList.add("active");
 
     selectedBook = null;
+
+    resetConversation();
 
     activeBook.classList.remove("show");
 
@@ -1195,17 +1230,81 @@ function addThinking(){
    SUMBER
 ===================================================== */
 
-function addSource(answer){
+function extractPageNumbers(chunks){
 
-    if(
-        !answer ||
-        !answer.source
-    ){
+    const pages = new Set();
+
+    (chunks || []).forEach(chunk => {
+
+        const text = [
+            chunk?.text || "",
+            chunk?.item?.key || ""
+        ].join(" ");
+
+        /*
+           PDF hasil konversi kita sudah membawa penanda seperti:
+           "Halaman PDF 5"
+           "Halaman PDF 28"
+           dst.
+        */
+        const matches = text.match(
+            /(?:Halaman\s+PDF|Halaman|PDF\s+halaman)\s*[:#-]?\s*(\d+)/gi
+        ) || [];
+
+        matches.forEach(match => {
+
+            const number =
+                match.match(/(\d+)/)?.[1];
+
+            if(number){
+                pages.add(Number(number));
+            }
+
+        });
+
+    });
+
+    return [...pages].sort((a,b) => a-b);
+}
+
+
+function extractSourceNames(chunks){
+
+    const names = new Set();
+
+    (chunks || []).forEach(chunk => {
+
+        const key =
+            chunk?.item?.key ||
+            chunk?.source ||
+            "";
+
+        if(key){
+            names.add(
+                String(key)
+                    .replace(/^.*[\\/]/, "")
+                    .replace(/\.md$/i, "")
+                    .replace(/\.pdf$/i, "")
+            );
+        }
+
+    });
+
+    return [...names];
+}
+
+
+function addSource(chunks){
+
+    if(!Array.isArray(chunks) || !chunks.length){
         return;
     }
 
-    const source =
-        answer.source;
+    const sourceNames =
+        extractSourceNames(chunks);
+
+    const pages =
+        extractPageNumbers(chunks);
 
     const row =
         document.createElement("div");
@@ -1227,19 +1326,26 @@ function addSource(answer){
 
     let html = "";
 
-    if(source.book){
+    if(sourceNames.length){
+
         html +=
-            `<strong>📖 ${escapeHtml(source.book)}</strong>`;
+            `<strong>📖 Sumber</strong><br>` +
+            sourceNames
+                .map(name => escapeHtml(name))
+                .join("<br>");
+
     }
 
-    if(source.chapter){
+    if(pages.length){
+
         html +=
-            `<br>Bab: ${escapeHtml(source.chapter)}`;
+            `<br><strong>📄 Halaman PDF:</strong> ` +
+            pages.join(", ");
+
     }
 
-    if(source.page){
-        html +=
-            `<br>Halaman: ${escapeHtml(String(source.page))}`;
+    if(!html){
+        return;
     }
 
     sourceBox.innerHTML =
@@ -1254,7 +1360,6 @@ function addSource(answer){
     messages.scrollTop =
         messages.scrollHeight;
 }
-
 
 /* =====================================================
    ESCAPE HTML
@@ -1306,22 +1411,32 @@ form.addEventListener(
 
         try{
 
+            /*
+               Jika memilih buku, arahkan model untuk memprioritaskan
+               buku tersebut. AI Search tetap mencari dari seluruh
+               instance, karena metadata filter belum diperlukan untuk
+               versi ini.
+            */
+            const userContent = selectedBook
+                ? (
+                    "Saya sedang membahas buku: " +
+                    selectedBook.name +
+                    ". Jawab pertanyaan berikut dengan memprioritaskan " +
+                    "isi buku tersebut. Jika jawabannya tidak ditemukan " +
+                    "dalam buku itu, katakan bahwa sumber yang tersedia " +
+                    "belum cukup.\n\nPertanyaan: " +
+                    question
+                  )
+                : question;
+
+            conversation.push({
+                role: "user",
+                content: userContent
+            });
+
             const payload = {
-
-                question: question,
-
-                book_id:
-                    selectedBook
-                    ? selectedBook.id
-                    : null,
-
-                book_name:
-                    selectedBook
-                    ? selectedBook.name
-                    : null
-
+                messages: conversation
             };
-
 
             const response =
                 await fetch(
@@ -1339,39 +1454,49 @@ form.addEventListener(
                     }
                 );
 
-
             const data =
                 await response.json();
 
-
             thinking.remove();
 
-
-            if(
-                !response.ok ||
-                !data.success
-            ){
-
+            if(!response.ok){
                 throw new Error(
-                    data.message ||
-                    "Terjadi kendala."
+                    data?.error?.message ||
+                    data?.message ||
+                    "Cloudflare AI Search tidak dapat menjawab."
                 );
-
             }
 
+            const answer =
+                data?.choices?.[0]?.message?.content ||
+                data?.result?.response ||
+                data?.answer ||
+                "";
+
+            if(!answer){
+                throw new Error(
+                    "Jawaban AI tidak ditemukan pada respons Cloudflare."
+                );
+            }
+
+            /* Simpan konteks percakapan untuk pertanyaan berikutnya. */
+            conversation.push({
+                role: "assistant",
+                content: answer
+            });
 
             /* jawaban */
-
             addMessage(
-                data.answer ||
-                "Baik bro.",
+                answer,
                 "bot"
             );
 
-
-            /* sumber */
-
-            addSource(data);
+            /* sumber dari chunks Cloudflare */
+            addSource(
+                Array.isArray(data?.chunks)
+                    ? data.chunks
+                    : []
+            );
 
 
         }catch(error){
@@ -1440,7 +1565,9 @@ input.addEventListener(
 /*
    CATATAN DEPLOYMENT:
    Frontend ini tidak menyimpan API key.
-   API key dan PDF tetap berada di backend.
+   Endpoint yang dipakai adalah Cloudflare AI Search Public Endpoint.
+   Tidak ada API key yang disimpan di frontend.
+   Dokumen sumber tetap berada di Cloudflare AI Search.
 */
 </script>
 

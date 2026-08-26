@@ -17,13 +17,13 @@ section{padding:42px 0}h2{color:var(--navy);font-size:32px;margin:0 0 8px}.muted
 @media(max-width:900px){.heroGrid{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.heroCard{order:-1}.sectionTop{display:block}.searchBox{margin-top:14px;max-width:none}}@media(max-width:640px){.nav nav{display:none}.logoimg{width:60px}.brandtext strong{font-size:18px}.brandtext small{display:none}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.aboutBox{grid-template-columns:1fr;text-align:center}.aboutLogo{margin:auto}.hero{padding-top:34px}.card{min-height:auto}}
 
 /* Floating Tanya Om Tije */
-/.omtije-float{position:fixed;right:22px;bottom:22px;z-index:1000;display:flex;align-items:center;gap:10px;text-decoration:none}
-/.omtije-float-label{background:#061b3a;color:#fff;padding:10px 14px;border-radius:999px;font-weight:900;font-size:13px;box-shadow:0 10px 28px rgba(6,27,58,.22);opacity:0;transform:translateX(8px);transition:.2s;pointer-events:none;white-space:nowrap}
-/.omtije-float:hover .omtije-float-label{opacity:1;transform:translateX(0)}
-/.omtije-avatar{width:78px;height:78px;border-radius:50%;object-fit:cover;border:4px solid #f6b21a;background:#fff;box-shadow:0 10px 30px rgba(6,27,58,.25);transition:transform .2s,box-shadow .2s}
-/.omtije-float:hover .omtije-avatar{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 34px rgba(6,27,58,.3)}
-/.omtije-pulse{position:absolute;right:3px;bottom:3px;width:15px;height:15px;border-radius:50%;background:#10b981;border:3px solid #fff}
-/@media(max-width:640px){.omtije-float{right:14px;bottom:14px}.omtije-avatar{width:64px;height:64px;border-width:3px}.omtije-float-label{display:none}.omtije-pulse{width:13px;height:13px;right:1px;bottom:1px}}
+.omtije-float{position:fixed;right:22px;bottom:22px;z-index:1000;display:flex;align-items:center;gap:10px;text-decoration:none}
+.omtije-float-label{background:#061b3a;color:#fff;padding:10px 14px;border-radius:999px;font-weight:900;font-size:13px;box-shadow:0 10px 28px rgba(6,27,58,.22);opacity:0;transform:translateX(8px);transition:.2s;pointer-events:none;white-space:nowrap}
+.omtije-float:hover .omtije-float-label{opacity:1;transform:translateX(0)}
+.omtije-avatar{width:78px;height:78px;border-radius:50%;object-fit:cover;border:4px solid #f6b21a;background:#fff;box-shadow:0 10px 30px rgba(6,27,58,.25);transition:transform .2s,box-shadow .2s}
+.omtije-float:hover .omtije-avatar{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 34px rgba(6,27,58,.3)}
+.omtije-pulse{position:absolute;right:3px;bottom:3px;width:15px;height:15px;border-radius:50%;background:#10b981;border:3px solid #fff}
+@media(max-width:640px){.omtije-float{right:14px;bottom:14px}.omtije-avatar{width:64px;height:64px;border-width:3px}.omtije-float-label{display:none}.omtije-pulse{width:13px;height:13px;right:1px;bottom:1px}}
 </style>
 </head>
 <body>
@@ -239,40 +239,6 @@ function renderBooks(){
     );
   }).join('');
 }
-</script>
-<!-- Widget Chat Coze via Iframe -->
-<iframe
-  src="https://www.coze.com/store/bot/7676107833469550645"
-  style="position: fixed; bottom: 20px; right: 20px; width: 400px; height: 600px; border: none; z-index: 999999; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
-  title="Chat Om Tije">
-</iframe>
-<!-- Script Coze Web SDK -->
-<script src="https://sf-cdn.coze.com/obj/unedited-static/coze/chat/1.0.0/coze.js"></script>
-
-<script>
-  new CozeWebSDK.WebChatClient({
-    config: {
-      bot_id: '7676107833469550645',
-    },
-    auth: {
-      type: 'token',
-      token: 'pat_5sulN4IK6a3HLufCU8LuRgoWreDtIKLiH8v01ScKsJj8qGoyq08mMTXaKmxVKMlC',
-      onRefreshToken: function () {
-        return 'pat_5sulN4IK6a3HLufCU8LuRgoWreDtIKLiH8v01ScKsJj8qGoyq08mMTXaKmxVKMlC';
-      },
-    },
-    userInfo: {
-      id: 'user',
-      nickname: 'Pembaca',
-    },
-    ui: {
-      base: {
-        icon: 'https://sf-cdn.coze.com/obj/unedited-static/coze/logo.png',
-        layout: 'pc',
-      },
-      title: 'Tanya Om Tije',
-    },
-  });
 </script>
 </body>
 </html>

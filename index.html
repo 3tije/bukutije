@@ -16,14 +16,49 @@ section{padding:42px 0}h2{color:var(--navy);font-size:32px;margin:0 0 8px}.muted
 .publisher{display:inline-block;margin:2px 0 10px;color:#475467;font-size:13px;font-weight:800}.quoteBook{margin:10px 0 0;padding:10px 12px;border-left:4px solid var(--gold);background:#fffaf0;color:#624200;border-radius:10px;font-size:13px;line-height:1.5}.best{background:#fff0d8;color:#9a5b00}.free{background:#eafff6;color:#047857}.about{background:var(--soft);border-top:1px solid #e8eef8;border-bottom:1px solid #e8eef8}.aboutBox{background:#fff;border:1px solid var(--line);border-radius:26px;padding:26px;display:grid;grid-template-columns:140px 1fr;gap:22px;align-items:center}.aboutLogo{width:140px;height:auto;display:block}.quote{color:#fff;background:linear-gradient(135deg,var(--navy),#0b3d91);border-radius:28px;padding:28px;margin-top:18px}.quote p{margin:0;font-size:20px;line-height:1.6}.quote small{display:block;margin-top:12px;color:#d5e7ff;font-weight:900}footer{padding:28px 0;text-align:center;color:var(--muted);font-size:14px}.footerLogo{width:180px;max-width:80%;height:auto;display:block;margin:0 auto 12px}
 @media(max-width:900px){.heroGrid{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.heroCard{order:-1}.sectionTop{display:block}.searchBox{margin-top:14px;max-width:none}}@media(max-width:640px){.nav nav{display:none}.logoimg{width:60px}.brandtext strong{font-size:18px}.brandtext small{display:none}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.aboutBox{grid-template-columns:1fr;text-align:center}.aboutLogo{margin:auto}.hero{padding-top:34px}.card{min-height:auto}}
 
-/* Floating Tanya Om Tije */
-.omtije-float{position:fixed;right:22px;bottom:22px;z-index:1000;display:flex;align-items:center;gap:10px;text-decoration:none}
-.omtije-float-label{background:#061b3a;color:#fff;padding:10px 14px;border-radius:999px;font-weight:900;font-size:13px;box-shadow:0 10px 28px rgba(6,27,58,.22);opacity:0;transform:translateX(8px);transition:.2s;pointer-events:none;white-space:nowrap}
-.omtije-float:hover .omtije-float-label{opacity:1;transform:translateX(0)}
-.omtije-avatar{width:78px;height:78px;border-radius:50%;object-fit:cover;border:4px solid #f6b21a;background:#fff;box-shadow:0 10px 30px rgba(6,27,58,.25);transition:transform .2s,box-shadow .2s}
-.omtije-float:hover .omtije-avatar{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 34px rgba(6,27,58,.3)}
-.omtije-pulse{position:absolute;right:3px;bottom:3px;width:15px;height:15px;border-radius:50%;background:#10b981;border:3px solid #fff}
-@media(max-width:640px){.omtije-float{right:14px;bottom:14px}.omtije-avatar{width:64px;height:64px;border-width:3px}.omtije-float-label{display:none}.omtije-pulse{width:13px;height:13px;right:1px;bottom:1px}}
+/* =========================
+   TANYA OM TIJE — FLOATING BADGE
+========================= */
+.omtije-float{
+  position:fixed;right:20px;bottom:20px;z-index:3000;
+  display:block;width:min(270px,25vw);min-width:190px;
+  padding:0;border:0;background:transparent;cursor:pointer;
+  filter:drop-shadow(0 12px 28px rgba(6,27,58,.25));
+  transition:transform .2s ease,filter .2s ease;
+}
+.omtije-float img{display:block;width:100%;height:auto;}
+.omtije-float:hover{transform:translateY(-4px) scale(1.025);filter:drop-shadow(0 18px 34px rgba(6,27,58,.32));}
+.omtije-float:focus-visible{outline:3px solid var(--blue);outline-offset:5px;border-radius:18px;}
+
+/* =========================
+   TANYA OM TIJE — MODAL
+========================= */
+.omtije-modal{
+  position:fixed;inset:0;z-index:5000;display:none;
+  background:rgba(6,27,58,.52);backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+}
+.omtije-modal.open{display:flex;align-items:center;justify-content:center;padding:18px;}
+.omtije-modal-box{
+  position:relative;width:min(1120px,100%);height:min(92vh,900px);
+  background:#fff;border-radius:26px;overflow:hidden;
+  box-shadow:0 28px 90px rgba(6,27,58,.34);
+  border:1px solid rgba(255,255,255,.8);
+}
+.omtije-modal iframe{width:100%;height:100%;border:0;display:block;background:#fff;}
+.omtije-modal-close{
+  position:absolute;right:12px;top:12px;z-index:10;width:42px;height:42px;
+  border:0;border-radius:50%;background:rgba(6,27,58,.92);color:#fff;
+  font-size:25px;line-height:1;cursor:pointer;box-shadow:0 7px 20px rgba(0,0,0,.25);
+}
+.omtije-modal-close:hover{transform:scale(1.05);}
+body.modal-open{overflow:hidden;}
+@media(max-width:640px){
+  .omtije-float{right:8px;bottom:10px;width:min(190px,45vw);min-width:0;}
+  .omtije-modal.open{padding:0;}
+  .omtije-modal-box{width:100%;height:100%;border-radius:0;}
+  .omtije-modal-close{right:9px;top:9px;width:40px;height:40px;}
+}
 </style>
 </head>
 <body>
@@ -33,10 +68,16 @@ section{padding:42px 0}h2{color:var(--navy);font-size:32px;margin:0 0 8px}.muted
 <section id="katalog"><div class="wrap"><div class="sectionTop"><div><h2>Katalog Buku</h2></div><div class="searchBox"><input id="searchInput" type="search" placeholder="Cari judul, kategori, ISBN..." oninput="renderBooks()"></div></div><div class="filters" id="filters"><button class="filter active" data-filter="all">Semua</button></div><div id="loading" class="muted">Memuat katalog...</div><div class="grid" id="grid"></div></div></section>
 <section class="about" id="penulis"><div class="wrap"><div class="aboutBox"><img src="assets/logo-bukutije.webp" class="aboutLogo" alt="Logo Buku Tije"><div><h2>Tentang Penulis</h2><p class="muted">Tri Tjahyono menulis dengan semangat kemanusiaan, edukasi, dan perubahan sosial. Buku-buku ini menjadi ruang berbagi pengalaman, gagasan, dan nilai agar pengetahuan bergerak menjadi manfaat.</p></div></div><div class="quote"><p>“Menulis adalah cara merawat jiwa. Agar pengalaman tidak berhenti di dalam diri, tetapi menjadi cahaya kecil bagi orang lain.”</p><small>— Tri Tjahyono</small></div></div></section>
 </main>
-<a class="omtije-float" href="tanya.html" aria-label="Tanya Om Tije">
-  <span class="omtije-float-label">Tanya Om Tije</span>
-  <span style="position:relative;display:block"><img class="omtije-avatar" src="assets/avatar-om-tije.png" alt="Om Tije - Tanya tentang buku"><span class="omtije-pulse" aria-hidden="true"></span></span>
-</a>
+<button class="omtije-float" id="openTanyaOmTije" type="button" aria-label="Buka Tanya Om Tije">
+  <img src="assets/tanya-om-tije-badge.png" alt="Tanya Om Tije">
+</button>
+
+<div class="omtije-modal" id="tanyaModal" aria-hidden="true">
+  <div class="omtije-modal-box" role="dialog" aria-modal="true" aria-label="Tanya Om Tije">
+    <button class="omtije-modal-close" id="closeTanyaModal" type="button" aria-label="Tutup">×</button>
+    <iframe id="tanyaFrame" title="Tanya Om Tije" src="about:blank"></iframe>
+  </div>
+</div>
 <footer><div class="wrap"><img src="assets/logo-bukutije.webp" class="footerLogo" alt="Logo Buku Tije"><div>© 2026 Buku Tije • Inspirasi • Edukasi • Transformasi</div></div></footer>
 <script>
 let BOOKS = [];
@@ -240,5 +281,174 @@ function renderBooks(){
   }).join('');
 }
 </script>
+
+<script>
+(function(){
+  const modal = document.getElementById('tanyaModal');
+  const frame = document.getElementById('tanyaFrame');
+  const openBtn = document.getElementById('openTanyaOmTije');
+  const closeBtn = document.getElementById('closeTanyaModal');
+
+  function openTanya(){
+    frame.src = 'tanya.html';
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+  }
+
+  function closeTanya(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.classList.remove('modal-open');
+    frame.src = 'about:blank';
+  }
+
+  openBtn.addEventListener('click', openTanya);
+  closeBtn.addEventListener('click', closeTanya);
+
+  modal.addEventListener('click', function(e){
+    if(e.target === modal) closeTanya();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal.classList.contains('open')) closeTanya();
+  });
+})();
+</script>
+
+
+<!-- TANYA OM TIJE FINAL UI START -->
+<style>
+  #tanyaOmTijeTrigger {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 9998;
+    width: min(360px, 42vw);
+    cursor: pointer;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,.22));
+    transition: transform .18s ease, filter .18s ease;
+  }
+  #tanyaOmTijeTrigger:hover {
+    transform: translateY(-4px) scale(1.015);
+    filter: drop-shadow(0 14px 24px rgba(0,0,0,.28));
+  }
+  #tanyaOmTijeTrigger img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  #tanyaOmTijeModal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(8, 18, 35, .58);
+    backdrop-filter: blur(5px);
+  }
+  #tanyaOmTijeModal.is-open { display: flex; }
+
+  #tanyaOmTijePanel {
+    width: min(1080px, 96vw);
+    height: min(820px, 92vh);
+    background: #fff;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 28px 80px rgba(0,0,0,.32);
+    position: relative;
+  }
+  #tanyaOmTijeClose {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    z-index: 3;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,.94);
+    color: #17324d;
+    font-size: 24px;
+    line-height: 38px;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(0,0,0,.16);
+  }
+  #tanyaOmTijeFrame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #fff;
+  }
+
+  @media (max-width: 700px) {
+    #tanyaOmTijeTrigger {
+      right: 12px;
+      bottom: 12px;
+      width: min(255px, 72vw);
+    }
+    #tanyaOmTijeModal {
+      padding: 0;
+    }
+    #tanyaOmTijePanel {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      border-radius: 0;
+    }
+    #tanyaOmTijeClose {
+      top: 8px;
+      right: 8px;
+    }
+  }
+</style>
+
+<button id="tanyaOmTijeTrigger" type="button" aria-label="Tanya Om Tije">
+  <img src="assets/tanya-om-tije-badge.png" alt="Tanya Om Tije — Ngobrol, Bertanya, Berbagi Inspirasi">
+</button>
+
+<div id="tanyaOmTijeModal" role="dialog" aria-modal="true" aria-label="Tanya Om Tije">
+  <div id="tanyaOmTijePanel">
+    <button id="tanyaOmTijeClose" type="button" aria-label="Tutup">×</button>
+    <iframe id="tanyaOmTijeFrame" title="Tanya Om Tije" src="tanya.html"></iframe>
+  </div>
+</div>
+
+<script>
+(function() {
+  const trigger = document.getElementById('tanyaOmTijeTrigger');
+  const modal = document.getElementById('tanyaOmTijeModal');
+  const close = document.getElementById('tanyaOmTijeClose');
+
+  function openTanya() {
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeTanya() {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  trigger.addEventListener('click', openTanya);
+  close.addEventListener('click', closeTanya);
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) closeTanya();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeTanya();
+  });
+})();
+</script>
+<!-- TANYA OM TIJE FINAL UI END -->
+
 </body>
 </html>

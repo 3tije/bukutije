@@ -7,7 +7,7 @@
 <title>Tanya Om Tije | Buku Tije</title>
 
 <meta name="description"
-      content="Ngobrol bersama Om Tije tentang buku, gagasan, pengalaman, dan kehidupan.">
+      content="Tanya Om Tije tentang buku, gagasan, pengalaman, dan pemikiran dalam Buku Tije.">
 
 <style>
 :root{
@@ -52,6 +52,7 @@ body{
 .top{
     padding:18px 0 8px;
 }
+.embedded-tanya .top{display:none;}
 
 .back{
     display:inline-flex;
@@ -89,12 +90,11 @@ body{
     background:rgba(255,255,255,.96);
 }
 
-.head img{
-    width:78px;
-    height:78px;
-    border-radius:50%;
-    object-fit:cover;
-    border:4px solid var(--gold);
+.head-badge{
+    width:260px;
+    max-width:42%;
+    height:auto;
+    display:block;
     flex-shrink:0;
 }
 
@@ -111,183 +111,11 @@ body{
 }
 
 /* =========================
-   BOOK SELECTOR
-========================= */
-
-.selector{
-    padding:20px;
-    background:#fafdff;
-    border-bottom:1px solid var(--line);
-}
-
-.selector-title{
-    margin:0 0 5px;
-    color:var(--navy);
-    font-size:18px;
-    font-weight:900;
-}
-
-.selector-subtitle{
-    margin:0 0 16px;
-    color:var(--muted);
-    font-size:14px;
-}
-
-.book-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
-}
-
-.book-card{
-    position:relative;
-    border:1px solid var(--line);
-    background:#fff;
-    border-radius:18px;
-    padding:10px;
-    cursor:pointer;
-    transition:.2s ease;
-    text-align:left;
-}
-
-.book-card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 24px rgba(6,27,58,.10);
-}
-
-.book-card.active{
-    border:2px solid var(--blue);
-    box-shadow:0 8px 25px rgba(11,99,255,.14);
-}
-
-.book-cover{
-    width:100%;
-    aspect-ratio:2/3;
-    object-fit:cover;
-    border-radius:12px;
-    display:block;
-    background:#edf3fb;
-}
-
-.book-name{
-    margin:9px 2px 2px;
-    color:var(--navy);
-    font-weight:900;
-    font-size:14px;
-    line-height:1.35;
-}
-
-.book-author{
-    margin:0 2px;
-    color:var(--muted);
-    font-size:11px;
-}
-
-.book-check{
-    position:absolute;
-    top:14px;
-    right:14px;
-    width:25px;
-    height:25px;
-    border-radius:50%;
-    background:var(--blue);
-    color:#fff;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
-}
-
-.book-card.active .book-check{
-    display:flex;
-}
-
-/* =========================
-   GENERAL MODE
-========================= */
-
-.general{
-    margin-top:14px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:13px 15px;
-    border:1px solid var(--line);
-    border-radius:16px;
-    background:#fff;
-    cursor:pointer;
-}
-
-.general.active{
-    border:2px solid var(--blue);
-    background:#f5f9ff;
-}
-
-.general-icon{
-    width:38px;
-    height:38px;
-    border-radius:12px;
-    background:linear-gradient(135deg,var(--blue),var(--cyan));
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:18px;
-    flex-shrink:0;
-}
-
-.general-title{
-    font-weight:900;
-    color:var(--navy);
-}
-
-.general-text{
-    font-size:12px;
-    color:var(--muted);
-    margin-top:2px;
-}
-
-/* =========================
-   ACTIVE BOOK BAR
-========================= */
-
-.active-book{
-    display:none;
-    padding:10px 20px;
-    background:#f1f7ff;
-    border-bottom:1px solid var(--line);
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-}
-
-.active-book.show{
-    display:flex;
-}
-
-.active-book-info{
-    font-size:13px;
-    color:var(--navy);
-}
-
-.active-book-info strong{
-    font-weight:900;
-}
-
-.change-book{
-    border:0;
-    background:transparent;
-    color:var(--blue);
-    font-weight:800;
-    cursor:pointer;
-}
-
-/* =========================
    MESSAGES
 ========================= */
 
 .messages{
-    min-height:430px;
+    min-height:360px;
     max-height:58vh;
     overflow:auto;
     padding:22px;
@@ -316,6 +144,28 @@ body{
     font-size:15px;
 }
 
+.welcome-bubble{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    line-height:1.55;
+}
+
+.welcome-bubble .welcome-greeting{
+    margin:0 0 8px;
+    font-weight:800;
+    color:var(--navy);
+    white-space:normal;
+}
+
+.welcome-bubble .welcome-intro{
+    margin:0;
+    width:92%;
+    max-width:92%;
+    display:block;
+    white-space:normal;
+}
+
 .bot .bubble{
     background:#fff;
     border:1px solid var(--line);
@@ -331,6 +181,17 @@ body{
         );
     color:#fff;
     border-top-right-radius:6px;
+}
+
+@media (max-width:700px){
+    .welcome-bubble{
+        width:100%;
+        max-width:100%;
+    }
+    .welcome-bubble .welcome-intro{
+        width:96%;
+        max-width:96%;
+    }
 }
 
 /* =========================
@@ -372,6 +233,37 @@ body{
         opacity:1;
     }
 }
+
+
+.source-book{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+.source-book img{
+    width:86px;
+    height:122px;
+    object-fit:cover;
+    border-radius:8px;
+    border:1px solid #e6d7b4;
+    background:#fff;
+    flex-shrink:0;
+    box-shadow:0 3px 10px rgba(16,35,63,.10);
+}
+.source-book-info{
+    min-width:0;
+    flex:1;
+    line-height:1.55;
+}
+.source-book-info strong{
+    display:block;
+    margin-bottom:6px;
+}
+.source-pages{
+    margin-top:4px;
+    color:#667085;
+}
+
 
 /* =========================
    SOURCE
@@ -476,6 +368,17 @@ body{
 
 @media(max-width:600px){
 
+    .source-book{
+        gap:12px;
+    }
+
+    .source-book img{
+        width:70px;
+        height:100px;
+    }
+
+
+
     .wrap{
         width:min(100% - 16px,980px);
     }
@@ -493,9 +396,9 @@ body{
         padding:16px;
     }
 
-    .head img{
-        width:62px;
-        height:62px;
+    .head-badge{
+        width:190px;
+        max-width:48%;
     }
 
     .head h1{
@@ -505,52 +408,7 @@ body{
     .head p{
         font-size:13px;
     }
-
-    .selector{
-        padding:16px;
-    }
-
-    .book-grid{
-    grid-template-columns:repeat(3,1fr);
-    gap:7px;
-}
-
-.book-card{
-    padding:6px;
-    border-radius:12px;
-}
-
-.book-name{
-    font-size:10px;
-    line-height:1.25;
-}
-
-.book-author{
-    font-size:9px;
-}
-
-    .book-card{
-        padding:7px;
-        border-radius:13px;
-    }
-
-    .book-name{
-        font-size:11px;
-    }
-
-    .book-author{
-        font-size:9px;
-    }
-
-    .book-check{
-        width:20px;
-        height:20px;
-        top:9px;
-        right:9px;
-        font-size:11px;
-    }
-
-    .messages{
+.messages{
         min-height:55vh;
         max-height:58vh;
         padding:16px;
@@ -578,6 +436,11 @@ body{
 </head>
 
 <body>
+<script>
+if (window.self !== window.top) {
+  document.documentElement.classList.add('embedded-tanya');
+}
+</script>
 
 <div class="wrap top">
     <a class="back" href="index.html">
@@ -594,324 +457,24 @@ body{
 <header class="head">
 
     <img
-        src="assets/avatar-om-tije.png"
-        alt="Om Tije"
+        class="head-badge"
+        src="assets/tanya-om-tije-badge2.png"
+        alt="Tanya Om Tije"
     >
 
     <div>
         <h1>Tanya Om Tije</h1>
 
-        <p>
-            Ruang ngobrol tentang buku, gagasan,
-            dan perjalanan yang ada di balik tulisan.
+        <p class="head-description">
+            Tanyakan apa saja tentang buku-buku, gagasan, pengalaman,<br>
+            dan pemikiran yang ada di balik tulisan.
         </p>
     </div>
 
 </header>
 
 
-<!-- PILIH BUKU -->
-
-<section class="selector">
-
-    <h2 class="selector-title">
-        Mau ngobrol tentang buku yang mana?
-    </h2>
-
-    <p class="selector-subtitle">
-        Pilih salah satu buku, atau ngobrol umum dengan Om Tije.
-    </p>
-
-
-    <div class="book-grid">
-
-        <!-- BUKU 1 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="jejak-kelam-di-balik-bayang-bayang-peredaran-narkoba"
-            data-book-name="Jejak Kelam di Balik Bayang-Bayang Peredaran Narkoba"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/jejak-kelam-di-balik-bayang-bayang-peredaran-narkoba.webp"
-                alt="Cover Jejak Kelam di Balik Bayang-Bayang Peredaran Narkoba"
-                loading="lazy"
-            >
-            <div class="book-name">Jejak Kelam di Balik Bayang-Bayang Peredaran Narkoba</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 2 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="penyuluh-hebat-manusia-merdeka"
-            data-book-name="Penyuluh Hebat, Manusia Merdeka"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/penyuluh-hebat-manusia-merdeka.webp"
-                alt="Cover Penyuluh Hebat, Manusia Merdeka"
-                loading="lazy"
-            >
-            <div class="book-name">Penyuluh Hebat, Manusia Merdeka</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 3 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="bayang-dan-cahaya-nilai-nilai-humanistik-dalam-perang-melawan-narkoba"
-            data-book-name="Bayang dan Cahaya"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/bayang-dan-cahaya-nilai-nilai-humanistik-dalam-perang-melawan-narkoba.webp"
-                alt="Cover Bayang dan Cahaya"
-                loading="lazy"
-            >
-            <div class="book-name">Bayang dan Cahaya</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 4 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="hadir-sepenuh-jiwa"
-            data-book-name="Hadir Sepenuh Jiwa"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/hadir-sepenuh-jiwa.webp"
-                alt="Cover Hadir Sepenuh Jiwa"
-                loading="lazy"
-            >
-            <div class="book-name">Hadir Sepenuh Jiwa</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 5 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="kekuatan-dalam-diam"
-            data-book-name="Kekuatan dalam Diam"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/kekuatan-dalam-diam.webp"
-                alt="Cover Kekuatan dalam Diam"
-                loading="lazy"
-            >
-            <div class="book-name">Kekuatan dalam Diam</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 6 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="aku-bukan-sembarang-remaja-self-love-safe-life"
-            data-book-name="Aku Bukan Sembarang Remaja"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/aku-bukan-sembarang-remaja-self-love-safe-life.webp"
-                alt="Cover Aku Bukan Sembarang Remaja"
-                loading="lazy"
-            >
-            <div class="book-name">Aku Bukan Sembarang Remaja</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 7 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="nikmat-di-balik-sakit"
-            data-book-name="Nikmat di Balik Sakit"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/nikmat-di-balik-sakit.webp"
-                alt="Cover Nikmat di Balik Sakit"
-                loading="lazy"
-            >
-            <div class="book-name">Nikmat di Balik Sakit</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 8 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="anak-bersinar-bangsa-bercahaya"
-            data-book-name="Anak Bersinar, Bangsa Bercahaya"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/anak-bersinar-bangsa-bercahaya.webp"
-                alt="Cover Anak Bersinar, Bangsa Bercahaya"
-                loading="lazy"
-            >
-            <div class="book-name">Anak Bersinar, Bangsa Bercahaya</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 9 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="berani-takrela"
-            data-book-name="Berani TakRela"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/berani-takrela.webp"
-                alt="Cover Berani TakRela"
-                loading="lazy"
-            >
-            <div class="book-name">Berani TakRela</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 10 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="tetap-manusia-di-dunia-yang-penuh-algoritma-menjaga-sisi-manusiawi-di-tengah-revolusi-algoritma-dan-kecerdasan-manusia"
-            data-book-name="Tetap Manusia di Dunia yang Penuh Algoritma"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/tetap-manusia-di-dunia-yang-penuh-algoritma-menjaga-sisi-manusiawi-di-tengah-revolusi-algoritma-dan-kecerdasan-manusia.webp"
-                alt="Cover Tetap Manusia di Dunia yang Penuh Algoritma"
-                loading="lazy"
-            >
-            <div class="book-name">Tetap Manusia di Dunia yang Penuh Algoritma</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 11 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="tenang-di-tengah-arus"
-            data-book-name="Tenang di Tengah Arus"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/tenang-di-tengah-arus.webp"
-                alt="Cover Tenang di Tengah Arus"
-                loading="lazy"
-            >
-            <div class="book-name">Tenang di Tengah Arus</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 12 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="fasilitator-sosial"
-            data-book-name="Fasilitator Sosial"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/fasilitator-sosial.webp"
-                alt="Cover Fasilitator Sosial"
-                loading="lazy"
-            >
-            <div class="book-name">Fasilitator Sosial</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-        <!-- BUKU 13 -->
-        <button
-            type="button"
-            class="book-card"
-            data-book-id="gerakan-warga-berani-takrela"
-            data-book-name="Gerakan Warga Berani TakRela"
-        >
-            <span class="book-check">✓</span>
-            <img
-                class="book-cover"
-                src="https://buku.mytije.com/covers/gerakan-warga-berani-takrela.webp"
-                alt="Cover Gerakan Warga Berani TakRela"
-                loading="lazy"
-            >
-            <div class="book-name">Gerakan Warga Berani TakRela</div>
-            <div class="book-author">Tri Tjahyono</div>
-        </button>
-
-    </div>
-
-
-    <!-- TANYA UMUM -->
-
-    <div
-        class="general active"
-        id="generalOption"
-    >
-
-        <div class="general-icon">
-            ✦
-        </div>
-
-        <div>
-
-            <div class="general-title">
-                Tanya Umum
-            </div>
-
-            <div class="general-text">
-                Ngobrol bebas dan menemukan gagasan
-                dari pola pemikiran dalam buku-buku Om Tije.
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- BUKU YANG AKTIF -->
-
-<div
-    class="active-book"
-    id="activeBook"
->
-
-    <div class="active-book-info">
-        Sedang ngobrol tentang:
-        <strong id="activeBookName"></strong>
-    </div>
-
-    <button
-        type="button"
-        class="change-book"
-        id="changeBook"
-    >
-        Ganti
-    </button>
-
-</div>
+<!-- CHAT LANGSUNG -->
 
 
 <!-- PESAN -->
@@ -922,15 +485,15 @@ body{
 >
 
     <div class="msg bot">
-
-        <div class="bubble">
-Halo, saya Om Tije 😊
-
-Silakan pilih salah satu buku kalau ingin membahas isinya secara khusus.
-
-Kalau tidak memilih buku, kita juga bisa ngobrol santai tentang berbagai hal. Bisa jadi dari pertanyaan itu kita menemukan gagasan yang pernah saya tuliskan dalam buku-buku saya.
+        <div class="bubble welcome-bubble">
+            <div class="welcome-greeting">Halo, saya Om Tije 😊</div>
+            <div class="welcome-intro">
+                Silakan ngobrol atau bertanya apa saja. Saya bisa membantu membahas
+                buku, gagasan, pengalaman, pekerjaan, maupun berbagai hal lain.
+                Jika pertanyaan berkaitan dengan buku-buku saya, saya akan merujuk
+                pada sumber yang tersedia.
+            </div>
         </div>
-
     </div>
 
 </div>
@@ -1018,133 +581,12 @@ const messages =
 const sendButton =
     document.getElementById("sendButton");
 
-const generalOption =
-    document.getElementById("generalOption");
-
-const activeBook =
-    document.getElementById("activeBook");
-
-const activeBookName =
-    document.getElementById("activeBookName");
-
-const changeBook =
-    document.getElementById("changeBook");
-
-const bookCards =
-    document.querySelectorAll(".book-card");
-
-const endChat =
-    document.getElementById("endChat");
+const endChat = document.getElementById("endChat");
 
 
 /* =====================================================
    STATE
 ===================================================== */
-
-let selectedBook = null;
-
-
-function resetConversation(){
-
-    conversation = [
-        {
-            role: "system",
-            content:
-                "Anda adalah Om Tije, teman pembaca dan penjelas gagasan Tri Tjahyono. " +
-                "Jawab berdasarkan dokumen yang tersedia di AI Search. " +
-                "Jangan mengarang isi buku. Jika sumber tidak cukup, katakan dengan jujur. " +
-                "Jawab dalam bahasa Indonesia yang natural, hangat, jelas, dan tidak terlalu panjang."
-        }
-    ];
-}
-
-/* =====================================================
-   PILIH BUKU
-===================================================== */
-
-bookCards.forEach(card => {
-
-    card.addEventListener("click", () => {
-
-        bookCards.forEach(item => {
-            item.classList.remove("active");
-        });
-
-        card.classList.add("active");
-
-        generalOption.classList.remove("active");
-
-        selectedBook = {
-            id: card.dataset.bookId,
-            name: card.dataset.bookName
-        };
-
-        resetConversation();
-
-        activeBookName.textContent =
-            selectedBook.name;
-
-        activeBook.classList.add("show");
-
-        input.placeholder =
-            "Tanyakan sesuatu tentang buku ini...";
-
-        input.focus();
-
-    });
-
-});
-
-
-/* =====================================================
-   TANYA UMUM
-===================================================== */
-
-generalOption.addEventListener("click", () => {
-
-    bookCards.forEach(card => {
-        card.classList.remove("active");
-    });
-
-    generalOption.classList.add("active");
-
-    selectedBook = null;
-
-    resetConversation();
-
-    activeBook.classList.remove("show");
-
-    input.placeholder =
-        "Tanyakan apa saja...";
-
-    input.focus();
-
-});
-
-
-/* =====================================================
-   GANTI BUKU
-===================================================== */
-
-changeBook.addEventListener("click", () => {
-
-    bookCards.forEach(card => {
-        card.classList.remove("active");
-    });
-
-    generalOption.classList.add("active");
-
-    selectedBook = null;
-
-    activeBook.classList.remove("show");
-
-    input.placeholder =
-        "Tanyakan apa saja...";
-
-    input.focus();
-
-});
-
 
 /* =====================================================
    TAMBAH PESAN
@@ -1268,6 +710,7 @@ function extractPageNumbers(chunks){
 }
 
 
+
 function extractSourceNames(chunks){
 
     const names = new Set();
@@ -1293,72 +736,109 @@ function extractSourceNames(chunks){
     return [...names];
 }
 
+/* Cover buku ditampilkan ketika sumber buku berhasil ditemukan. */
+const BOOK_COVERS = {
+    "jejak-kelam-di-balik-bayang-bayang-peredaran-narkoba":
+        "https://buku.mytije.com/covers/jejak-kelam-di-balik-bayang-bayang-peredaran-narkoba.webp",
+    "penyuluh-hebat-manusia-merdeka":
+        "https://buku.mytije.com/covers/penyuluh-hebat-manusia-merdeka.webp",
+    "bayang-dan-cahaya-nilai-nilai-humanistik-dalam-perang-melawan-narkoba":
+        "https://buku.mytije.com/covers/bayang-dan-cahaya-nilai-nilai-humanistik-dalam-perang-melawan-narkoba.webp",
+    "hadir-sepenuh-jiwa":
+        "https://buku.mytije.com/covers/hadir-sepenuh-jiwa.webp",
+    "kekuatan-dalam-diam":
+        "https://buku.mytije.com/covers/kekuatan-dalam-diam.webp",
+    "aku-bukan-sembarang-remaja-self-love-safe-life":
+        "https://buku.mytije.com/covers/aku-bukan-sembarang-remaja-self-love-safe-life.webp",
+    "nikmat-di-balik-sakit":
+        "https://buku.mytije.com/covers/nikmat-di-balik-sakit.webp",
+    "anak-bersinar-bangsa-bercahaya":
+        "https://buku.mytije.com/covers/anak-bersinar-bangsa-bercahaya.webp",
+    "berani-takrela":
+        "https://buku.mytije.com/covers/berani-takrela.webp",
+    "tetap-manusia-di-dunia-yang-penuh-algoritma-menjaga-sisi-manusiawi-di-tengah-revolusi-algoritma-dan-kecerdasan-manusia":
+        "https://buku.mytije.com/covers/tetap-manusia-di-dunia-yang-penuh-algoritma-menjaga-sisi-manusiawi-di-tengah-revolusi-algoritma-dan-kecerdasan-manusia.webp",
+    "tenang-di-tengah-arus":
+        "https://buku.mytije.com/covers/tenang-di-tengah-arus.webp",
+    "fasilitator-sosial":
+        "https://buku.mytije.com/covers/fasilitator-sosial.webp",
+    "gerakan-warga-berani-takrela":
+        "https://buku.mytije.com/covers/gerakan-warga-berani-takrela.webp"
+};
+
+const BOOK_NAMES = {
+    "jejak-kelam-di-balik-bayang-bayang-peredaran-narkoba":"Jejak Kelam di Balik Bayang-Bayang Peredaran Narkoba",
+    "penyuluh-hebat-manusia-merdeka":"Penyuluh Hebat, Manusia Merdeka",
+    "bayang-dan-cahaya-nilai-nilai-humanistik-dalam-perang-melawan-narkoba":"Bayang dan Cahaya",
+    "hadir-sepenuh-jiwa":"Hadir Sepenuh Jiwa",
+    "kekuatan-dalam-diam":"Kekuatan dalam Diam",
+    "aku-bukan-sembarang-remaja-self-love-safe-life":"Aku Bukan Sembarang Remaja",
+    "nikmat-di-balik-sakit":"Nikmat di Balik Sakit",
+    "anak-bersinar-bangsa-bercahaya":"Anak Bersinar, Bangsa Bercahaya",
+    "berani-takrela":"Berani TakRela",
+    "tetap-manusia-di-dunia-yang-penuh-algoritma-menjaga-sisi-manusiawi-di-tengah-revolusi-algoritma-dan-kecerdasan-manusia":"Tetap Manusia di Dunia yang Penuh Algoritma",
+    "tenang-di-tengah-arus":"Tenang di Tengah Arus",
+    "fasilitator-sosial":"Fasilitator Sosial",
+    "gerakan-warga-berani-takrela":"Gerakan Warga Berani TakRela"
+};
+
+function normalizeSourceKey(value){
+    return String(value || "")
+        .toLowerCase()
+        .replace(/\.md$/i,"")
+        .replace(/\.pdf$/i,"")
+        .replace(/[^a-z0-9]+/g,"-")
+        .replace(/^-+|-+$/g,"");
+}
 
 function addSource(chunks){
 
-    if(!Array.isArray(chunks) || !chunks.length){
-        return;
-    }
+    if(!Array.isArray(chunks) || !chunks.length) return;
 
-    const sourceNames =
-        extractSourceNames(chunks);
+    const sourceNames = extractSourceNames(chunks);
+    const pages = extractPageNumbers(chunks);
 
-    const pages =
-        extractPageNumbers(chunks);
+    const matched = sourceNames
+        .map(normalizeSourceKey)
+        .map(key => key.replace(/-kb$/i, ""))
+        .find(key => BOOK_COVERS[key]);
 
-    const row =
-        document.createElement("div");
+    const row = document.createElement("div");
+    row.className = "msg bot";
 
-    row.className =
-        "msg bot";
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
 
-    const bubble =
-        document.createElement("div");
-
-    bubble.className =
-        "bubble";
-
-    const sourceBox =
-        document.createElement("div");
-
-    sourceBox.className =
-        "source";
+    const sourceBox = document.createElement("div");
+    sourceBox.className = "source";
 
     let html = "";
 
-    if(sourceNames.length){
-
-        html +=
-            `<strong>📖 Sumber</strong><br>` +
-            sourceNames
-                .map(name => escapeHtml(name))
-                .join("<br>");
-
+    if(matched){
+        html += `
+            <div class="source-book">
+                <img src="${BOOK_COVERS[matched]}" alt="${escapeHtml(BOOK_NAMES[matched])}" loading="lazy">
+                <div class="source-book-info">
+                    <strong>📖 ${escapeHtml(BOOK_NAMES[matched])}</strong>
+                    ${pages.length ? `<div class="source-pages">📄 Halaman PDF: ${pages.join(", ")}</div>` : ""}
+                </div>
+            </div>`;
+    } else {
+        if(sourceNames.length){
+            html += `<strong>📖 Sumber</strong><br>${sourceNames.map(name => escapeHtml(name)).join("<br>")}`;
+        }
+        if(pages.length){
+            html += `<br><strong>📄 Halaman PDF:</strong> ${pages.join(", ")}`;
+        }
     }
 
-    if(pages.length){
+    if(!html) return;
 
-        html +=
-            `<br><strong>📄 Halaman PDF:</strong> ` +
-            pages.join(", ");
-
-    }
-
-    if(!html){
-        return;
-    }
-
-    sourceBox.innerHTML =
-        html;
-
+    sourceBox.innerHTML = html;
     bubble.appendChild(sourceBox);
-
     row.appendChild(bubble);
-
     messages.appendChild(row);
-
-    messages.scrollTop =
-        messages.scrollHeight;
+    messages.scrollTop = messages.scrollHeight;
 }
 
 /* =====================================================
@@ -1417,17 +897,7 @@ form.addEventListener(
                instance, karena metadata filter belum diperlukan untuk
                versi ini.
             */
-            const userContent = selectedBook
-                ? (
-                    "Saya sedang membahas buku: " +
-                    selectedBook.name +
-                    ". Jawab pertanyaan berikut dengan memprioritaskan " +
-                    "isi buku tersebut. Jika jawabannya tidak ditemukan " +
-                    "dalam buku itu, katakan bahwa sumber yang tersedia " +
-                    "belum cukup.\n\nPertanyaan: " +
-                    question
-                  )
-                : question;
+            const userContent = question;
 
             conversation.push({
                 role: "user",

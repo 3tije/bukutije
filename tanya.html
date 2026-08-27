@@ -679,62 +679,48 @@ function escapeHtml(value){
 
 function formatAnswer(value){
 
-  let text =
-    String(value ?? "");
+  let text = String(value ?? "");
 
-  /*
-   * Hilangkan markdown sederhana.
-   */
-  text =
-    text.replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>");
+  // Normalisasi newline literal dari backend
+  text = text.replace(/\\n/g, "\n");
 
-  text =
-    escapeHtml(
-      text
-        .replace(/\*\*(.*?)\*\*/g,"$1")
-    );
+  // Escape HTML terlebih dahulu
+  text = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
-  /*
-   * Link URL dibuat clickable.
-   */
-  text =
-    text.replace(
-      /(https?:\/\/[^\s<]+)/g,
-      function(url){
+  // Markdown bold
+  text = text.replace(
+    /\*\*(.*?)\*\*/g,
+    "<strong>$1</strong>"
+  );
 
-        const safe =
-          url.replace(/[.,;]+$/,"");
+  // URL
+  text = text.replace(
+    /(https?:\/\/[^\s<]+)/g,
+    function(url){
 
-        return (
-          '<a class="answer-link" ' +
-          'href="' +
-          escapeHtml(safe) +
-          '" target="_blank" ' +
-          'rel="noopener noreferrer">' +
-          escapeHtml(safe) +
-          '</a>'
-        );
+      const clean =
+        url.replace(/[.,;]+$/, "");
 
-      }
-    );
+      return (
+        '<a class="answer-link" ' +
+        'href="' + clean + '" ' +
+        'target="_blank" ' +
+        'rel="noopener noreferrer">' +
+        clean +
+        '</a>'
+      );
+    }
+  );
 
-  /*
-   * Bold sederhana setelah escaping.
-   */
-  text =
-    text.replace(
-      /\*\*(.*?)\*\*/g,
-      "<strong>$1</strong>"
-    );
-
-  text =
-    text.replace(
-      /\n/g,
-      "<br>"
-    );
+  // Newline menjadi <br>
+  text = text.replace(/\n/g, "<br>");
 
   return text;
-
 }
 
 
@@ -927,40 +913,237 @@ function addThinking(){
    SOURCES
 ===================================================== */
 
-function addSources(
-  data
-){
+function addSources(data){
 
   let sources = [];
 
-  /*
-   * Format utama dari Code.gs:
-   * data.sources
-   */
+  if(Array.isArray(data?.sources)){
+    sources = data.sources;
+  }
 
-  if(
-    Array.isArray(data?.sources)
-  ){
+  if(!sources.length && data?.source){
+    sources = [data.source];
+  }
 
-    sources =
-      data.sources;
-
+  if(!sources.length){
+    return;
   }
 
   /*
-   * Fallback source tunggal.
+   * Kelompokkan berdasarkan buku.
    */
+  const books = new Map();
 
-  if(
-    !sources.length &&
-    data?.source
-  ){
+  sources.forEach(function(source){
 
-    sources = [
-      data.source
-    ];
+    if(!source) return;
 
-  }
+    const title =
+      sourceTitle(source) ||
+      "Buku Om Tije";
+
+    const bookId =
+      sourceBookKey(source) ||
+      title;
+
+    const key =
+      String(bookId)
+        .toLowerCase()
+        .trim();
+
+    const page =
+      sourcePage(source);
+
+    if(!books.has(key)){
+
+      books.set(key,{
+        title:title,
+        bookId:bookId,
+        pages:new Set()
+      });
+
+    }
+
+    if(page !== "" && page != null){
+
+      books
+        .get(key)
+        .pages
+        .add(String(page));
+
+    }
+
+  });
+
+
+  /*
+   * Render satu kartu untuk setiap buku.
+   */
+  books.forEach(function(book){
+
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "msg bot";
+
+
+    const bubble =
+      document.createElement("div");
+
+    bubble.className =
+      "bubble";
+
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "source-card";
+
+
+    /*
+     * Cover.
+     */
+    const bookKey =
+      slugify(book.bookId);
+
+    const titleKey =
+      slugify(book.title);
+
+    const cover =
+      BOOK_COVERS[bookKey] ||
+      BOOK_COVERS[titleKey];
+
+
+    if(cover){
+
+      const img =
+        document.createElement("img");
+
+      img.className =
+        "source-cover";
+
+      img.src =
+        cover;
+
+      img.alt =
+        "Cover " + book.title;
+
+      img.loading =
+        "lazy";
+
+      img.onerror =
+        function(){
+
+          this.style.display =
+            "none";
+
+        };
+
+      card.appendChild(img);
+
+    }
+
+
+    /*
+     * Informasi buku.
+     */
+    const meta =
+      document.createElement("div");
+
+    meta.className =
+      "source-meta";
+
+
+    const titleDiv =
+      document.createElement("div");
+
+    titleDiv.className =
+      "source-title";
+
+    titleDiv.textContent =
+      book.title;
+
+
+    meta.appendChild(
+      titleDiv
+    );
+
+
+    const pages =
+      Array.from(book.pages);
+
+
+    /*
+     * Urutkan nomor halaman.
+     */
+    pages.sort(function(a,b){
+
+      const na =
+        parseInt(a,10);
+
+      const nb =
+        parseInt(b,10);
+
+      if(
+        !Number.isNaN(na) &&
+        !Number.isNaN(nb)
+      ){
+
+        return na - nb;
+
+      }
+
+      return String(a)
+        .localeCompare(String(b));
+
+    });
+
+
+    if(pages.length){
+
+      const pageDiv =
+        document.createElement("div");
+
+      pageDiv.className =
+        "source-page";
+
+      pageDiv.textContent =
+        "Halaman PDF: " +
+        pages.join(", ");
+
+      meta.appendChild(
+        pageDiv
+      );
+
+    }
+
+
+    card.appendChild(
+      meta
+    );
+
+
+    bubble.appendChild(
+      card
+    );
+
+    row.appendChild(
+      bubble
+    );
+
+    messages.appendChild(
+      row
+    );
+
+  });
+
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+}
 
   if(
     !sources.length

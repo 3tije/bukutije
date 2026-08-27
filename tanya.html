@@ -207,7 +207,7 @@ if(window.self !== window.top){
 <script>
 const API_URL =
   "https://script.google.com/macros/s/AKfycbx9hp9EmneQU0FKybgrPnOJQgUYypimTbcmBJ9e2F7ipqCX7OMCYEudP9ZXq7DwxCFKwA/exec";
-// FINAL — frontend stabil: kontrak API lama dipertahankan.
+
 const form=document.getElementById("form");
 const input=document.getElementById("input");
 const messages=document.getElementById("messages");
@@ -269,7 +269,7 @@ const BOOKS={
     title:"Berani TakRela",
     cover:"https://buku.mytije.com/covers/berani-takrela.webp"
   },
-"gerakan-warga-berani-takrela":{
+  "gerakan-warga-berani-takrela":{
     title:"Gerakan Warga Berani TakRela (Tolak – Rehab – Lapor)",
     cover:"https://buku.mytije.com/covers/gerakan-warga-berani-takrela.webp"
   }
@@ -293,50 +293,23 @@ function escapeHtml(value){
     .replace(/'/g,"&#039;");
 }
 
-function normalizePersona(value){
-  let text=String(value??"");
-
-  /*
-   * Jika model sesekali menyebut "Pak Tri/Tri Tjahyono" sebagai orang ketiga,
-   * ubah pada tampilan agar suara tetap konsisten sebagai Om Tije.
-   * Tidak mengubah sumber atau pertanyaan pengguna.
-   */
-  text=text
-    .replace(/\bMenurut Pak Tri\b/gi,"Menurut saya")
-    .replace(/\bmenurut Pak Tri\b/gi,"menurut saya")
-    .replace(/\bPak Tri\b/gi,"saya")
-    .replace(/\bTri Tjahyono\b/gi,"saya");
-
-  return text;
-}
-
 function formatAnswer(value){
-  let text=normalizePersona(value);
-
+  let text=String(value??"");
   text=text
     .replace(/\\r\\n/g,"\n")
     .replace(/\\n/g,"\n")
     .replace(/\r\n/g,"\n")
     .replace(/\r/g,"\n");
 
-  // Normalisasi tag sederhana yang kadang dikirim backend.
   text=text
     .replace(/<strong>/gi,"**")
     .replace(/<\/strong>/gi,"**")
     .replace(/<b>/gi,"**")
     .replace(/<\/b>/gi,"**");
 
-  // Markdown ringan setelah HTML-escape.
   text=escapeHtml(text);
 
-  text=text.replace(/\*\*(.+?)\*\*/gs,"<strong>$1</strong>");
-  text=text.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g,"$1<em>$2</em>");
-
-  // Beberapa respons AI memakai _italic_.
-  text=text.replace(/(^|[^_])_([^_\n]+?)_(?!_)/g,"$1<em>$2</em>");
-
-  // Jangan biarkan pasangan * yang gagal diparse tampil mentah.
-  text=text.replace(/(^|[\s(])\*([^\n*]+?)\*(?=($|[\s).,!?;:]))/g,"$1<em>$2</em>");
+  text=text.replace(/\*\*(.*?)\*\*/gs,"<strong>$1</strong>");
 
   text=text.replace(
     /(https?:\/\/[^\s<]+)/g,
@@ -399,26 +372,6 @@ function canonicalBookKey(value){
     .replace(/-(kb|kb-terstruktur|terstruktur)-.*$/i,"");
 
   return key;
-}
-
-function sourceCover(source){
-  if(!source) return "";
-  return (
-    source.cover ||
-    source.cover_url ||
-    source.coverUrl ||
-    source.image ||
-    source.image_url ||
-    source.imageUrl ||
-    source.metadata?.cover ||
-    source.metadata?.cover_url ||
-    source.metadata?.image ||
-    source.item?.cover ||
-    source.item?.cover_url ||
-    source.item?.image ||
-    source.item?.metadata?.cover ||
-    ""
-  );
 }
 
 function sourcePage(source){
@@ -564,7 +517,7 @@ function addSources(data){
 
       books.set(key,{
         title:title || "Sumber Buku",
-        cover:resolved?.cover || sourceCover(source) || "",
+        cover:resolved?.cover || "",
         pages:new Set()
       });
 
@@ -575,17 +528,12 @@ function addSources(data){
     if(resolved){
 
       book.title=resolved.title;
-      book.cover=resolved.cover || book.cover;
+      book.cover=resolved.cover;
 
     }else if(title){
 
       book.title=title;
 
-    }
-
-    if(!book.cover){
-      const directCover=sourceCover(source);
-      if(directCover) book.cover=directCover;
     }
 
     const page=sourcePage(source);
@@ -617,7 +565,7 @@ function addSources(data){
       img.loading="lazy";
 
       img.onerror=function(){
-        this.remove();
+        this.style.display="none";
       };
 
       card.appendChild(img);
@@ -669,106 +617,6 @@ function addSources(data){
     messages.scrollHeight;
 }
 /* =====================================================
-   SIMPAN SESI SEMENTARA
-   - Berguna jika iframe/modal ditutup tidak sengaja.
-   - Tidak menyimpan ke server.
-===================================================== */
-const STORAGE_KEY="tanya-om-tije-session-v1";
-
-function saveState(){
-  try{
-    const state={
-      conversation,
-      messages:[...messages.querySelectorAll(".msg")].map(row=>({
-        type:row.classList.contains("user")?"user":"bot",
-        html:row.querySelector(".bubble")?.innerHTML || "",
-        typing:row.querySelector(".bubble")?.classList.contains("typing") || false
-      }))
-    };
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
-  }catch(err){
-    console.warn("Sesi Tanya Om Tije tidak dapat disimpan:",err);
-  }
-}
-
-function restoreState(){
-  try{
-    const raw=localStorage.getItem(STORAGE_KEY);
-    if(!raw) return false;
-    const state=JSON.parse(raw);
-    if(!Array.isArray(state?.messages) || !state.messages.length) return false;
-
-    messages.innerHTML="";
-    conversation=Array.isArray(state.conversation)?state.conversation:[];
-
-    state.messages.forEach(item=>{
-      const row=document.createElement("div");
-      row.className="msg "+(item.type==="user"?"user":"bot");
-      const bubble=document.createElement("div");
-      bubble.className="bubble";
-      bubble.innerHTML=item.html || "";
-      row.appendChild(bubble);
-      messages.appendChild(row);
-    });
-
-    messages.scrollTop=messages.scrollHeight;
-    return true;
-  }catch(err){
-    console.warn("Sesi Tanya Om Tije tidak dapat dipulihkan:",err);
-    localStorage.removeItem(STORAGE_KEY);
-    return false;
-  }
-}
-
-function clearSavedState(){
-  try{ localStorage.removeItem(STORAGE_KEY); }catch(err){}
-}
-
-/* =====================================================
-   PERTANYAAN LANJUTAN
-   Backend lama tidak menerima history sebagai parameter.
-   Karena itu konteks tidak dipaksakan ke payload API.
-   Untuk pertanyaan yang terlalu pendek/ambigu, minta pengguna
-   menyebutkan kembali topiknya agar jawaban tidak menebak.
-===================================================== */
-
-function isAmbiguousFollowUp(question){
-  const q=String(question||"").trim().toLowerCase();
-
-  if(conversation.length<2) return false;
-
-  const patterns=[
-    /^bagaimana itu\??$/,
-    /^bagaimana\??$/,
-    /^terus bagaimana\??$/,
-    /^kalau begitu bagaimana\??$/,
-    /^kalau begitu\??$/,
-    /^lalu\??$/,
-    /^terus\??$/,
-    /^apa lagi\??$/,
-    /^yang lain\??$/,
-    /^maksudnya\??$/,
-    /^kenapa begitu\??$/,
-    /^mengapa begitu\??$/,
-    /^terus apa\??$/,
-    /^bagaimana selanjutnya\??$/,
-    /^dan selanjutnya\??$/,
-    /^itu bagaimana\??$/,
-    /^itu apa\??$/,
-    /^jelaskan lagi\??$/
-  ];
-
-  return patterns.some(re=>re.test(q)) || q.length<=4;
-}
-
-function addClarificationMessage(){
-  return addMessage(
-    "Boleh, saya lanjutkan. Agar jawaban saya tepat, sebutkan sedikit topik atau bagian yang ingin dilanjutkan, ya. Misalnya: “Bagaimana penerapannya dalam pekerjaan?”",
-    "bot"
-  );
-}
-
-/* =====================================================
    KIRIM
    TIDAK ADA TIMEOUT BUATAN FRONTEND
 ===================================================== */
@@ -780,26 +628,12 @@ form.addEventListener("submit",async function(e){
 
   if(!question || sendButton.disabled) return;
 
-  if(isAmbiguousFollowUp(question)){
-    addMessage(question,"user");
-    conversation.push({
-      role:"user",
-      content:question
-    });
-    saveState();
-    input.value="";
-    addClarificationMessage();
-    input.focus();
-    return;
-  }
-
   addMessage(question,"user");
 
   conversation.push({
     role:"user",
     content:question
   });
-  saveState();
 
   input.value="";
   sendButton.disabled=true;
@@ -808,12 +642,6 @@ form.addEventListener("submit",async function(e){
   const thinking=addThinking();
 
   try{
-    /*
-     * PENTING:
-     * Gunakan kontrak API yang sudah terbukti bekerja.
-     * Jangan kirim history/conversation/persona sebagai field tambahan
-     * karena backend Apps Script lama belum membutuhkan field tersebut.
-     */
     const payload={
       question:question,
       mode:"auto",
@@ -861,7 +689,6 @@ form.addEventListener("submit",async function(e){
       role:"assistant",
       content:answer
     });
-    saveState();
 
     addSources(data);
 
@@ -873,7 +700,6 @@ form.addEventListener("submit",async function(e){
     thinking.innerHTML=
       "<strong>Maaf, Om Tije belum berhasil menjawab.</strong><br>"+
       "Silakan coba lagi sebentar.";
-    saveState();
 
   }finally{
 
@@ -898,13 +724,9 @@ endChat.addEventListener("click",function(){
   input.disabled=true;
   sendButton.disabled=true;
   endChat.disabled=true;
-  clearSavedState();
   endChat.textContent="Percakapan selesai";
 
 });
-
-/* Pulihkan percakapan jika halaman/modal dibuka kembali. */
-restoreState();
 
 /* =====================================================
    ENTER

@@ -661,17 +661,6 @@ let conversation = [];
    ESCAPE
 ===================================================== */
 
-function escapeHtml(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
 
 /* =====================================================
    FORMAT JAWABAN
@@ -681,17 +670,21 @@ function formatAnswer(value){
 
   let text = String(value ?? "");
 
-  // Backend kadang mengirim newline sebagai karakter literal "\\n".
-  text = text.replace(/\\n/g, "\n");
+  // Normalisasi newline literal yang datang dari JSON/backend.
+  text = text
+    .replace(/\\r\\n/g, "\n")
+    .replace(/\\n/g, "\n")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n");
 
-  // Normalisasi tag HTML yang memang kita izinkan.
+  // Ubah tag format yang mungkin dikirim backend menjadi Markdown aman.
   text = text
     .replace(/<strong>/gi, "**")
     .replace(/<\/strong>/gi, "**")
     .replace(/<b>/gi, "**")
     .replace(/<\/b>/gi, "**");
 
-  // Escape HTML agar respons backend aman ditampilkan.
+  // Escape HTML agar jawaban backend tidak merusak layout.
   text = text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -699,13 +692,19 @@ function formatAnswer(value){
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 
-  // Markdown bold.
+  // Bold Markdown.
   text = text.replace(
     /\*\*(.*?)\*\*/gs,
     "<strong>$1</strong>"
   );
 
-  // URL menjadi tautan.
+  // Bullet sederhana: "- item" / "* item".
+  text = text.replace(
+    /(^|<br>)[ \t]*[-*][ \t]+/g,
+    "$1• "
+  );
+
+  // URL menjadi link.
   text = text.replace(
     /(https?:\/\/[^\s<]+)/g,
     function(url){
@@ -929,16 +928,16 @@ function addSources(data){
   }
 
   if(!sources.length && data?.source){
-    sources = [data.source];
+    sources = Array.isArray(data.source)
+      ? data.source
+      : [data.source];
   }
 
   if(!sources.length){
     return;
   }
 
-  /*
-   * Kelompokkan berdasarkan buku.
-   */
+  // Satu buku = satu kartu. Semua halaman buku digabung.
   const books = new Map();
 
   sources.forEach(function(source){
@@ -947,16 +946,25 @@ function addSources(data){
 
     const title =
       sourceTitle(source) ||
+      sourceBookKey(source) ||
       "Buku Om Tije";
 
     const bookId =
       sourceBookKey(source) ||
       title;
 
+    // Judul diprioritaskan agar sumber dengan ID berbeda
+    // tetapi buku yang sama tidak tampil dua kali.
+    const titleKey =
+      slugify(title);
+
+    const idKey =
+      slugify(bookId);
+
     const key =
-      String(bookId)
-        .toLowerCase()
-        .trim();
+      titleKey ||
+      idKey ||
+      "buku-om-tije";
 
     const page =
       sourcePage(source);
@@ -971,21 +979,23 @@ function addSources(data){
 
     }
 
+    const book =
+      books.get(key);
+
+    // Pertahankan judul yang lebih informatif.
+    if(
+      book.title === "Buku Om Tije" &&
+      title !== "Buku Om Tije"
+    ){
+      book.title = title;
+    }
+
     if(page !== "" && page != null){
-
-      books
-        .get(key)
-        .pages
-        .add(String(page));
-
+      book.pages.add(String(page));
     }
 
   });
 
-
-  /*
-   * Render satu kartu untuk setiap buku.
-   */
   books.forEach(function(book){
 
     const row =
@@ -994,13 +1004,11 @@ function addSources(data){
     row.className =
       "msg bot";
 
-
     const bubble =
       document.createElement("div");
 
     bubble.className =
       "bubble";
-
 
     const card =
       document.createElement("div");
@@ -1008,10 +1016,6 @@ function addSources(data){
     card.className =
       "source-card";
 
-
-    /*
-     * Cover.
-     */
     const bookKey =
       slugify(book.bookId);
 
@@ -1021,7 +1025,6 @@ function addSources(data){
     const cover =
       BOOK_COVERS[bookKey] ||
       BOOK_COVERS[titleKey];
-
 
     if(cover){
 
@@ -1042,26 +1045,18 @@ function addSources(data){
 
       img.onerror =
         function(){
-
-          this.style.display =
-            "none";
-
+          this.style.display = "none";
         };
 
       card.appendChild(img);
 
     }
 
-
-    /*
-     * Informasi buku.
-     */
     const meta =
       document.createElement("div");
 
     meta.className =
       "source-meta";
-
 
     const titleDiv =
       document.createElement("div");
@@ -1072,41 +1067,26 @@ function addSources(data){
     titleDiv.textContent =
       book.title;
 
-
-    meta.appendChild(
-      titleDiv
-    );
-
+    meta.appendChild(titleDiv);
 
     const pages =
       Array.from(book.pages);
 
-
-    /*
-     * Urutkan nomor halaman.
-     */
     pages.sort(function(a,b){
 
-      const na =
-        parseInt(a,10);
-
-      const nb =
-        parseInt(b,10);
+      const na = parseInt(a,10);
+      const nb = parseInt(b,10);
 
       if(
         !Number.isNaN(na) &&
         !Number.isNaN(nb)
       ){
-
         return na - nb;
-
       }
 
-      return String(a)
-        .localeCompare(String(b));
+      return String(a).localeCompare(String(b));
 
     });
-
 
     if(pages.length){
 
@@ -1120,38 +1100,21 @@ function addSources(data){
         "Halaman PDF: " +
         pages.join(", ");
 
-      meta.appendChild(
-        pageDiv
-      );
+      meta.appendChild(pageDiv);
 
     }
 
-
-    card.appendChild(
-      meta
-    );
-
-
-    bubble.appendChild(
-      card
-    );
-
-    row.appendChild(
-      bubble
-    );
-
-    messages.appendChild(
-      row
-    );
+    card.appendChild(meta);
+    bubble.appendChild(card);
+    row.appendChild(bubble);
+    messages.appendChild(row);
 
   });
-
 
   messages.scrollTop =
     messages.scrollHeight;
 
 }
-
 
 
 /* =====================================================
@@ -1246,21 +1209,37 @@ form.addEventListener(
       };
 
 
-      const response =
-        await fetch(
-          API_URL,
-          {
+      // Timeout agar UI tidak "diam" tanpa batas.
+      const controller =
+        new AbortController();
 
-            method:
-              "POST",
-
-            body:
-              JSON.stringify(
-                payload
-              )
-
-          }
+      const timeoutId =
+        setTimeout(
+          function(){
+            controller.abort();
+          },
+          45000
         );
+
+      let response;
+
+      try{
+
+        response =
+          await fetch(
+            API_URL,
+            {
+              method:"POST",
+              body:JSON.stringify(payload),
+              signal:controller.signal
+            }
+          );
+
+      }finally{
+
+        clearTimeout(timeoutId);
+
+      }
 
 
       const raw =
@@ -1302,6 +1281,11 @@ form.addEventListener(
 
       const answer =
         data.answer ||
+        data.data?.answer ||
+        data.result?.answer ||
+        data.response ||
+        data.text ||
+        data.message ||
         "Maaf, Om Tije belum memperoleh jawaban.";
 
 
@@ -1352,9 +1336,19 @@ form.addEventListener(
       );
 
 
-      thinking.innerHTML =
-        "<strong>Maaf, Om Tije belum berhasil menjawab.</strong><br>" +
-        "Silakan coba lagi sebentar. Jika tetap terjadi, kemungkinan koneksi ke layanan Tanya Om Tije sedang bermasalah.";
+      if(error && error.name === "AbortError"){
+
+        thinking.innerHTML =
+          "<strong>Om Tije masih membutuhkan waktu membaca sumber.</strong><br>" +
+          "Silakan kirim pertanyaan sekali lagi.";
+
+      }else{
+
+        thinking.innerHTML =
+          "<strong>Maaf, Om Tije belum berhasil menjawab.</strong><br>" +
+          "Silakan coba lagi sebentar.";
+
+      }
 
 
     }finally{

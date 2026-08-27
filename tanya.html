@@ -543,7 +543,7 @@ if(window.self !== window.top){
     <div class="bubble welcome-bubble">
 
       <div class="welcome-greeting">
-        Halo, saya Om Tije 😊
+        Assalamu 'alaikum Wr Wb, saya Om Tije 😊
       </div>
 
       <div class="welcome-intro">
@@ -681,10 +681,17 @@ function formatAnswer(value){
 
   let text = String(value ?? "");
 
-  // Normalisasi newline literal dari backend
+  // Backend kadang mengirim newline sebagai karakter literal "\\n".
   text = text.replace(/\\n/g, "\n");
 
-  // Escape HTML terlebih dahulu
+  // Normalisasi tag HTML yang memang kita izinkan.
+  text = text
+    .replace(/<strong>/gi, "**")
+    .replace(/<\/strong>/gi, "**")
+    .replace(/<b>/gi, "**")
+    .replace(/<\/b>/gi, "**");
+
+  // Escape HTML agar respons backend aman ditampilkan.
   text = text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -692,13 +699,13 @@ function formatAnswer(value){
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 
-  // Markdown bold
+  // Markdown bold.
   text = text.replace(
-    /\*\*(.*?)\*\*/g,
+    /\*\*(.*?)\*\*/gs,
     "<strong>$1</strong>"
   );
 
-  // URL
+  // URL menjadi tautan.
   text = text.replace(
     /(https?:\/\/[^\s<]+)/g,
     function(url){
@@ -717,7 +724,7 @@ function formatAnswer(value){
     }
   );
 
-  // Newline menjadi <br>
+  // Newline menjadi <br>.
   text = text.replace(/\n/g, "<br>");
 
   return text;
@@ -1145,191 +1152,6 @@ function addSources(data){
 
 }
 
-  if(
-    !sources.length
-  ){
-
-    return;
-
-  }
-
-
-  const seen =
-    new Set();
-
-  sources.forEach(
-    function(source){
-
-      const title =
-        sourceTitle(source);
-
-      const page =
-        sourcePage(source);
-
-      if(
-        !title &&
-        !page
-      ){
-
-        return;
-
-      }
-
-      const key =
-        (
-          title +
-          "|" +
-          page
-        ).toLowerCase();
-
-      if(
-        seen.has(key)
-      ){
-
-        return;
-
-      }
-
-      seen.add(key);
-
-
-      const row =
-        document.createElement("div");
-
-      row.className =
-        "msg bot";
-
-
-      const bubble =
-        document.createElement("div");
-
-      bubble.className =
-        "bubble";
-
-
-      const card =
-        document.createElement("div");
-
-      card.className =
-        "source-card";
-
-
-      const bookKey =
-        slugify(
-          sourceBookKey(source) ||
-          title
-        );
-
-
-      const titleKey =
-        slugify(title);
-
-
-      const cover =
-        BOOK_COVERS[bookKey] ||
-        BOOK_COVERS[titleKey];
-
-
-      if(cover){
-
-        const img =
-          document.createElement("img");
-
-        img.className =
-          "source-cover";
-
-        img.src =
-          cover;
-
-        img.alt =
-          title
-            ? "Cover " + title
-            : "Cover buku";
-
-        img.loading =
-          "lazy";
-
-        img.onerror =
-          function(){
-
-            this.style.display =
-              "none";
-
-          };
-
-        card.appendChild(
-          img
-        );
-
-      }
-
-
-      const meta =
-        document.createElement("div");
-
-      meta.className =
-        "source-meta";
-
-
-      const titleDiv =
-        document.createElement("div");
-
-      titleDiv.className =
-        "source-title";
-
-      titleDiv.textContent =
-        title ||
-        "Buku Om Tije";
-
-
-      meta.appendChild(
-        titleDiv
-      );
-
-
-      if(page){
-
-        const pageDiv =
-          document.createElement("div");
-
-        pageDiv.className =
-          "source-page";
-
-        pageDiv.textContent =
-          "Halaman PDF " +
-          page;
-
-        meta.appendChild(
-          pageDiv
-        );
-
-      }
-
-
-      card.appendChild(
-        meta
-      );
-
-      bubble.appendChild(
-        card
-      );
-
-      row.appendChild(
-        bubble
-      );
-
-      messages.appendChild(
-        row
-      );
-
-    }
-  );
-
-
-  messages.scrollTop =
-    messages.scrollHeight;
-
-}
 
 
 /* =====================================================
@@ -1532,7 +1354,7 @@ form.addEventListener(
 
       thinking.innerHTML =
         "<strong>Maaf, Om Tije belum berhasil menjawab.</strong><br>" +
-        "Silakan coba lagi sebentar.";
+        "Silakan coba lagi sebentar. Jika tetap terjadi, kemungkinan koneksi ke layanan Tanya Om Tije sedang bermasalah.";
 
 
     }finally{

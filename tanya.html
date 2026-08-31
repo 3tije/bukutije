@@ -39,9 +39,9 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);backgroun
 .active-book-info{font-size:12px;color:var(--navy)}
 .active-book-info strong{font-weight:900}
 .change-book{border:0;background:transparent;color:var(--blue);font-weight:800;cursor:pointer}
-.messages{min-height:220px;height:360px;max-height:50vh;overflow:auto;padding:18px;background:#fbfdff}
+.messages{min-height:260px;height:auto;max-height:none;overflow-y:auto;overflow-x:hidden;padding:18px;background:#fbfdff}
 .msg{display:flex;margin:0 0 16px}.msg.bot{justify-content:flex-start}.msg.user{justify-content:flex-end}
-.bubble{max-width:78%;padding:14px 16px;border-radius:18px;line-height:1.65;white-space:pre-wrap;font-size:15px;overflow-wrap:anywhere}
+.bubble{max-width:78%;padding:14px 16px;border-radius:18px;line-height:1.65;white-space:pre-wrap;font-size:15px;overflow-wrap:anywhere;height:auto;min-height:0}
 .bot .bubble{background:#fff;border:1px solid var(--line);border-top-left-radius:6px}
 .user .bubble{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;border-top-right-radius:6px}
 .thinking{font-style:italic;color:#7b879b}
@@ -60,7 +60,7 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);backgroun
 .head{padding:14px 16px;gap:12px}.head img{width:68px;height:68px}.head h1{font-size:22px}.head p{font-size:13px}
 .selector{padding:12px}.book-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.book-card{padding:5px;border-radius:10px}.book-cover{width:48px;height:72px}
 .book-name{font-size:8.5px;line-height:1.15;min-height:20px}.book-author{font-size:7px}.book-check{width:16px;height:16px;font-size:9px;top:4px;right:4px}
-.messages{min-height:220px;height:48vh;max-height:420px;padding:16px}.bubble{max-width:88%;font-size:14px}.composer{padding:12px}.composer textarea{min-height:52px}.composer button{padding:0 15px;min-width:68px}
+.messages{min-height:260px;height:auto;max-height:none;padding:16px}.bubble{max-width:88%;font-size:14px}.composer{padding:12px}.composer textarea{min-height:52px}.composer button{padding:0 15px;min-width:68px}
 }
 </style>
 </head>
